@@ -1,0 +1,46 @@
+ wave_buoy_46253_db_schema.yaml
+
+wave_buoy_46253:
+  description: "This schema defines the structure for storing buoy data (station 46253) in Redis. Data is fetched in UTC and converted to PST/PDT before storage."
+  key_pattern: "wave_buoy_46253:YYYY-MM-DD:HH:MM"
+  value_type: "hash"
+  fields:
+    - date:
+        description: "The date of the buoy data in PST (or PDT). Format: YYYY-MM-DD"
+        type: "string"
+    - time:
+        description: "The time of the buoy data in PST (or PDT). Format: HH:MM"
+        type: "string"
+    - wave_height:
+        description: "The wave height in meters."
+        type: "float"
+    - dpd:
+        description: "Dominant wave period in seconds."
+        type: "float"
+    - water_temp:
+        description: "The water temperature in degrees Celsius."
+        type: "float"
+    - mean_wave_dir:
+        description: "The mean wave direction in degrees."
+        type: "float"
+
+storage_details:
+  key_format: "wave_buoy_46253:YYYY-MM-DD:HH:MM"
+  example_key: "wave_buoy_46253:2024-09-18:12:00"
+  value_format:
+    wave_height: "1.4"
+    dpd: "6"
+    water_temp: "16.5"
+    mean_wave_dir: "275"
+  example_value: 
+    wave_height: 1.4
+    dpd: 6
+    water_temp: 16.5
+    mean_wave_dir: 275
+  ttl: "No TTL is set; the data will be stored indefinitely unless manually purged."
+
+connection_details:
+  redis_host: "Your Redis host"
+  redis_port: 6379
+  redis_db: 0
+  redis_password: "Your Redis password if applicable"
