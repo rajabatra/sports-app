@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave Conditions</title>
+</head>
+<body>
+    <h1>Latest Wave Conditions</h1>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Wave Height (m)</th>
+            <th>DPD (s)</th>
+            <th>Water Temp (°C)</th>
+            <th>Mean Wave Direction (°)</th>
+        </tr>
+        {% for entry in data %}
+        <tr>
+            <td>{{ entry['date'] }}</td>
+            <td>{{ entry['time'] }}</td>
+            <td>{{ entry['data']['wave_height'] }}</td>
+            <td>{{ entry['data']['dpd'] }}</td>
+            <td>{{ entry['data']['water_temp'] }}</td>
+            <td>{{ entry['data']['mean_wave_dir'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
