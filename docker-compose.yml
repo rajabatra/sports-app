@@ -9,3 +9,12 @@ services:
     working_dir: /app/src
     environment:
       FLASK_ENV: development
+  test:
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app/src
+    environment:
+      FLASK_ENV: testing
+      PYTHONPATH: /app/src
+    command: pytest tests/ --disable-warnings

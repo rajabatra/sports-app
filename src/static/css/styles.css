@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+h1 {
+    margin-bottom: 40px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+    grid-gap: 20px;
+    justify-items: center;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.grid-item {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+}
+
+#compass {
+    margin-top: 20px;
+}
+
+svg {
+    width: 150px;
+    height: 150px;
+}
+
+#directionLabel {
+    margin-top: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+}

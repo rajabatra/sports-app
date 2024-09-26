@@ -3,29 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wave Conditions</title>
+    <title>Huntington Beach Surf Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1>Latest Wave Conditions</h1>
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Wave Height (m)</th>
-            <th>DPD (s)</th>
-            <th>Water Temp (°C)</th>
-            <th>Mean Wave Direction (°)</th>
-        </tr>
-        {% for entry in data %}
-        <tr>
-            <td>{{ entry['date'] }}</td>
-            <td>{{ entry['time'] }}</td>
-            <td>{{ entry['data']['wave_height'] }}</td>
-            <td>{{ entry['data']['dpd'] }}</td>
-            <td>{{ entry['data']['water_temp'] }}</td>
-            <td>{{ entry['data']['mean_wave_dir'] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <h1>Huntington Beach Surf Prediction</h1>
+    <p>Today's date: {{ today }}</p>
+    <p>Predicted surf size: {{ buoy_data['estimated_surf_size'] }} feet</p>
+    
+    {% if buoy_data %}
+    <div class="grid-container">
+        <div class="grid-item">
+            <h2>Wave Height</h2>
+            <canvas id="waveHeightChart"></canvas>
+        </div>
+        <div class="grid-item">
+            <h2>Water Temperature</h2>
+            <p>{{ buoy_data['temp'] }}°C</p>
+        </div>
+        <div class="grid-item">
+            <h2>Swell Period (DPD)</h2>
+            <p>{{ buoy_data['dpd'] }} seconds</p>
+        </div>
+        <div class="grid-item">
+            <h2>Wave Direction</h2>
+            <div id="compass">
+                <svg id="compassSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" stroke="black" stroke-width="2" fill="none" />
+                    <!-- Adjust the arrow length and position -->
+                    <line id="arrow" x1="50" y1="50" x2="50" y2="15" stroke="red" stroke-width="1" transform-origin="50 50" />
+                    <!-- Add cardinal directions -->
+                    <text x="50" y="15" text-anchor="middle" font-size="8">N</text>
+                    <text x="50" y="90" text-anchor="middle" font-size="8">S</text>
+                    <text x="90" y="55" text-anchor="middle" font-size="8">E</text>
+                    <text x="10" y="55" text-anchor="middle" font-size="8">W</text>
+                </svg>
+                <p id="directionLabel"></p>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script>
+        // Chart.js for wave height
+        const waveHeight = {{ buoy_data['wave_height'] }};
+        const ctx = document.getElementById('waveHeightChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Wave Height'],
+                datasets: [{
+                    label: 'Height in meters',
+                    data: [waveHeight],
+                    backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+                    borderColor: ['rgba(54, 162, 235, 1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 10,
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        // SVG compass direction
+        const waveDirection = {{ buoy_data['direction'] }};
+        const arrow = document.getElementById('arrow');
+        arrow.setAttribute('transform', `rotate(${waveDirection}, 0, 0)`);
+
+        const directionLabel = document.getElementById('directionLabel');
+        const directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+        const degree = Math.round(waveDirection / 22.5) % 16;
+        directionLabel.textContent = `Direction: ${directions[degree]} (${waveDirection}°)`;
+
+    </script>
+    {% else %}
+        <p>No buoy data available at the moment.</p>
+    {% endif %}
 </body>
 </html>
