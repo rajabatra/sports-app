@@ -29,3 +29,4 @@ numpy
 pytest
 pytest-flask
 flask-testing
+prometheus_flask_exporter

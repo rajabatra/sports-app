@@ -5,6 +5,7 @@ import time
 from flask import Flask, jsonify, render_template
 from buoy_data import get_buoy_data
 from datetime import datetime
+from prometheus_flask_exporter import PrometheusMetrics
 
 # Create Redis client globally (to be initialized in the app factory)
 redis_client = None
@@ -28,6 +29,11 @@ def update_buoy_data_periodically():
 
 def create_app():
     app = Flask(__name__)
+
+    metrics = PrometheusMetrics(app)
+    
+    # metrics
+    metrics.info('app_info', 'Application info', version='1.0.0')
 
     # Redis configuration
     global redis_client
@@ -74,8 +80,13 @@ def create_app():
             buoy_data = redis_client.hgetall(latest_key)
         else:
             buoy_data = None
-   
-        return render_template('index.html', today=today, buoy_data=buoy_data)
+        historical_data = []
+        for key in keys:
+            data = redis_client.hgetall(key)
+            data['date'] = key.split(':')[-1]  # Extract date from key
+            historical_data.append(data)
+
+        return render_template('index.html', today=today, buoy_data=buoy_data, historical_data=historical_data)
 
     # Ensure background thread starts when the app is ready
     with app.app_context():

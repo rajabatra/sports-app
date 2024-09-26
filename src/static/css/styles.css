@@ -39,3 +39,47 @@ svg {
     font-size: 1.2em;
     font-weight: bold;
 }
+
+.table-container {
+    max-height: 400px; /* Adjust height as needed */
+    overflow-y: auto;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.nav-tabs {
+    padding: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.tab-pane {
+    margin: 20px;
+}
+
+.wave-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 150px; /* Adjust height based on how prominent you want the wave to appear */
+    overflow: hidden;
+    line-height: 0;
+  }
+  
+  .wave-svg {
+    position: relative;
+    display: block;
+    width: 200vw; /* Duplicate width to fit two waves */
+    height: 100%;
+    animation: wave-animation 10s linear infinite; /* Infinite animation */
+  }
+  
+  @keyframes wave-animation {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%); /* Move to the left by half the width of the container */
+    }
+  }
