@@ -25,4 +25,6 @@ ENV FLASK_ENV=development
 ENV PYTHONUNBUFFERED=1
 
 # Command to run the Flask app
-CMD ["flask", "run", "--host=0.0.0.0"]
+#for dev: CMD ["flask", "run", "--host=0.0.0.0"]
+#for prod
+CMD ["gunicorn", "src.app:app", "--bind", "0.0.0.0:5000"]
